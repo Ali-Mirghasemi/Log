@@ -45,8 +45,11 @@
 #ifndef LOG_FMT
     /**
      * @brief Specify log header format
+     * @param LVL log level: NONE, ERROR, WARN, INFO, DEBUG, TRACE
+     * @param F string: file path, ex: "./main.c"
+     * @param L unsigned int: file line, 26
      */
-    #define LOG_FMT(LVL, FILE, LINE)            "[" #LVL " - " #FILE ":" #LINE "] "
+    #define LOG_FMT(LVL, F, L)                  "[" #LVL " - " F ":" #L "] "
 #endif
 
 #ifndef LOG_END_LINE
