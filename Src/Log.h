@@ -4,9 +4,9 @@
  * @brief This is Log header library for using for debugging and print log in applications
  * @version 0.1
  * @date 2025-04-08
- * 
+ *
  * @copyright Copyright (c) 2025
- * 
+ *
  */
 #ifndef _LOG_H_
 #define _LOG_H_
@@ -42,7 +42,7 @@
     /**
      * @brief Specify log header format
      */
-    #define LOG_FMT(LVL)                        "[" #LVL " - " __FILE__ ":" __LINE__ "] "
+    #define LOG_FMT(LVL, FILE, LINE)            "[" #LVL " - " #FILE ":" #LINE "] "
 #endif
 /************************************************************************/
 #define __LOG_VER_STR(major, minor, fix)        #major "." #minor "." #fix
@@ -73,49 +73,54 @@
 #endif
 /**
  * @brief Print log with specify level
- * 
+ *
  * @param LVL Log Level: NONE, ERROR, WARN, INFO, DEBUG, TRACE
  * @param FMT Format of log
  * @param Arguments
  */
-#define log(LVL, FMT, ...) \
-if (LOG_LEVEL_ ##LVL > LOG_LEVEL) { \
-    LOG_PRINT(LOG_FMT FMT, __VA_ARGS__); \
+#define logPrint(LVL, FMT, ...) \
+if (LOG_LEVEL_ ##LVL <= LOG_LEVEL) { \
+    LOG_PRINT(__LOG_FMT(LVL, __FILE__, __LINE__) FMT, ##__VA_ARGS__); \
 }
 /**
  * @brief Print log with ERROR level
- * 
+ *
  * @param FMT Format of log
  * @param Arguments
  */
-#define logError(FMT, ...)                          log(ERROR, FMT, __VA_ARGS__)
+#define logError(FMT, ...)                          logPrint(ERROR, FMT, ##__VA_ARGS__)
 /**
  * @brief Print log with WARN level
- * 
+ *
  * @param FMT Format of log
  * @param Arguments
  */
-#define logWarn(FMT, ...)                           log(WARN, FMT, __VA_ARGS__)
+#define logWarn(FMT, ...)                           logPrint(WARN, FMT, __VA_ARGS__)
 /**
  * @brief Print log with INFO level
- * 
+ *
  * @param FMT Format of log
  * @param Arguments
  */
-#define logInfo(FMT, ...)                           log(INFO, FMT, __VA_ARGS__)
+#define logInfo(FMT, ...)                           logPrint(INFO, FMT, __VA_ARGS__)
 /**
  * @brief Print log with DEBUG level
- * 
+ *
  * @param FMT Format of log
  * @param Arguments
  */
-#define logDebug(FMT, ...)                          log(DEBUG, FMT, __VA_ARGS__)
+#define logDebug(FMT, ...)                          logPrint(DEBUG, FMT, __VA_ARGS__)
 /**
  * @brief Print log with TRACE level
- * 
+ *
  * @param FMT Format of log
  * @param Arguments
  */
-#define logTrace(FMT, ...)                          log(TRACE, FMT, __VA_ARGS__)
+#define logTrace(FMT, ...)                          logPrint(TRACE, FMT, __VA_ARGS__)
+
+
+// ------------------------------ Private Macros -----------------------------
+#define __LOG_FMT(LVL, F, L)                        LOG_FMT(LVL, F, L)
+
 
 #endif
