@@ -67,6 +67,10 @@
 #define LOG_LEVEL_INFO                          3
 #define LOG_LEVEL_DEBUG                         4
 #define LOG_LEVEL_TRACE                         5
+/* Dynamic Log Level */
+#if LOG_DYNAMIC_LEVEL
+    static unsigned char LOG_LEVEL = LOG_LEVEL_TRACE;
+#endif
 /**
  * @brief Print log with specify level
  * 
