@@ -18,9 +18,32 @@
 /************************************************************************/
 /*                            Configuration                             */
 /************************************************************************/
+/**
+ * @brief If you need to change log level in runtime you can enable this feature
+ */
+#define LOG_DYNAMIC_LEVEL                       0
 
+#if !defined(LOG_LEVEL) && LOG_DYNAMIC_LEVEL == 0
+    /**
+     * @brief Select Log level for debugging
+     */
+    #define LOG_LEVEL                           LOG_LEVEL_TRACE
+#endif
 
+#ifndef LOG_PRINT
+    /**
+     * @brief Rename which function used to print, function must support printf input styles
+     * void printf(const char* fmt, ...);
+     */
+    #define LOG_PRINT                           printf
+#endif
 
+#ifndef LOG_FMT
+    /**
+     * @brief Specify log header format
+     */
+    #define LOG_FMT(LVL)                        "[" #LVL " - " __FILE__ ":" __LINE__ "] "
+#endif
 /************************************************************************/
 #define __LOG_VER_STR(major, minor, fix)        #major "." #minor "." #fix
 #define _LOG_VER_STR(major, minor, fix)         __LOG_VER_STR(major, minor, fix)
@@ -33,6 +56,62 @@
  */
 #define LOG_VER                                 ((LOG_VER_MAJOR * 10000UL) + (LOG_VER_MINOR * 100UL) + (LOG_VER_FIX))
 
-
+/* Check for include stdio */
+#if LOG_PRINT == printf
+    #include <stdio.h>
+#endif
+/* Log Levels */
+#define LOG_LEVEL_NONE                          0
+#define LOG_LEVEL_ERROR                         1
+#define LOG_LEVEL_WARN                          2
+#define LOG_LEVEL_INFO                          3
+#define LOG_LEVEL_DEBUG                         4
+#define LOG_LEVEL_TRACE                         5
+/**
+ * @brief Print log with specify level
+ * 
+ * @param LVL Log Level: NONE, ERROR, WARN, INFO, DEBUG, TRACE
+ * @param FMT Format of log
+ * @param Arguments
+ */
+#define log(LVL, FMT, ...) \
+if (LOG_LEVEL_ ##LVL > LOG_LEVEL) { \
+    LOG_PRINT(LOG_FMT FMT, __VA_ARGS__); \
+}
+/**
+ * @brief Print log with ERROR level
+ * 
+ * @param FMT Format of log
+ * @param Arguments
+ */
+#define logError(FMT, ...)                          log(ERROR, FMT, __VA_ARGS__)
+/**
+ * @brief Print log with WARN level
+ * 
+ * @param FMT Format of log
+ * @param Arguments
+ */
+#define logWarn(FMT, ...)                           log(WARN, FMT, __VA_ARGS__)
+/**
+ * @brief Print log with INFO level
+ * 
+ * @param FMT Format of log
+ * @param Arguments
+ */
+#define logInfo(FMT, ...)                           log(INFO, FMT, __VA_ARGS__)
+/**
+ * @brief Print log with DEBUG level
+ * 
+ * @param FMT Format of log
+ * @param Arguments
+ */
+#define logDebug(FMT, ...)                          log(DEBUG, FMT, __VA_ARGS__)
+/**
+ * @brief Print log with TRACE level
+ * 
+ * @param FMT Format of log
+ * @param Arguments
+ */
+#define logTrace(FMT, ...)                          log(TRACE, FMT, __VA_ARGS__)
 
 #endif
