@@ -22,6 +22,10 @@
  * @brief If you need to change log level in runtime you can enable this feature
  */
 #define LOG_DYNAMIC_LEVEL                       0
+/**
+ * @brief Enable Log color
+ */
+#define LOG_COLOR                               1
 
 #if !defined(LOG_LEVEL) && LOG_DYNAMIC_LEVEL == 0
     /**
@@ -43,6 +47,13 @@
      * @brief Specify log header format
      */
     #define LOG_FMT(LVL, FILE, LINE)            "[" #LVL " - " #FILE ":" #LINE "] "
+#endif
+
+#ifndef LOG_END_LINE
+    /**
+     * @brief Specify log end line
+     */
+    #define LOG_END_LINE                        "\r\n"
 #endif
 /************************************************************************/
 #define __LOG_VER_STR(major, minor, fix)        #major "." #minor "." #fix
@@ -80,7 +91,7 @@
  */
 #define logPrint(LVL, FMT, ...) \
 if (LOG_LEVEL_ ##LVL <= LOG_LEVEL) { \
-    LOG_PRINT(__LOG_FMT(LVL, __FILE__, __LINE__) FMT, ##__VA_ARGS__); \
+    LOG_PRINT(__LOG_FMT(LVL, __FILE__, __LINE__) FMT LOG_END_LINE, ##__VA_ARGS__); \
 }
 /**
  * @brief Print log with ERROR level
