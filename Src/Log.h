@@ -40,6 +40,10 @@
      * void printf(const char* fmt, ...);
      */
     #define LOG_PRINT                           printf
+    /**
+     * @brief Auto include stdio.h
+     */
+    #define LOG_INC_STDIO                       1
 #endif
 
 #ifndef LOG_HEADER
@@ -104,7 +108,7 @@
 #define LOG_VER                                 ((LOG_VER_MAJOR * 10000UL) + (LOG_VER_MINOR * 100UL) + (LOG_VER_FIX))
 
 /* Check for include stdio */
-#if LOG_PRINT == printf
+#if LOG_INC_STDIO
     #include <stdio.h>
 #endif
 /* Log Levels */
@@ -203,6 +207,13 @@
     #define LOG_COLOR_INFO
     #define LOG_COLOR_DEBUG
     #define LOG_COLOR_TRACE
+    #define LOG_COLOR_MODE                                          LINE
+
+    #define __LOG_COLOR_MODE_HEADER_HEADER
+    #define __LOG_COLOR_MODE_HEADER_LINE
+
+    #define __LOG_COLOR_MODE_LINE_HEADER
+    #define __LOG_COLOR_MODE_LINE_LINE
 #endif
 
 #endif
