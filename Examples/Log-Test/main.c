@@ -7,9 +7,9 @@ int main()
         LOG_PRINT("-----------------------------------------------------" LOG_END_LINE);
 #endif
 
-    logPrintFmt(ERROR, HEADER, "\e[32m", "This is error log.");
-    logPrintFmt(ERROR, HEADER, "\e[32m", "This is error log with params.: %d", 100);
-    logPrintFmt(ERROR, HEADER, "\e[32m", "This is error log with params.: %d, %x", 100, 0xFF);
+    logPrintFmt(ERROR, HEADER, "\e[31m", "This is error log.");
+    logPrintFmt(ERROR, HEADER, "\e[31m", "This is error log with params.: %d", 100);
+    logPrintFmt(ERROR, HEADER, "\e[31m", "This is error log with params.: %d, %x", 100, 0xFF);
 
     logPrintFmt(WARN, HEADER, "\e[33m", "This is warning log.");
     logPrintFmt(WARN, HEADER, "\e[33m", "This is warning log with params.: %d", 100);
@@ -27,9 +27,9 @@ int main()
     logPrintFmt(TRACE, HEADER, "\e[36m", "This is trace log with params.: %d", 100);
     logPrintFmt(TRACE, HEADER, "\e[36m", "This is trace log with params.: %d, %x", 100, 0xFF);
 
-    logPrintFmt(ERROR, LINE, "\e[32m", "This is error log.");
-    logPrintFmt(ERROR, LINE, "\e[32m", "This is error log with params.: %d", 100);
-    logPrintFmt(ERROR, LINE, "\e[32m", "This is error log with params.: %d, %x", 100, 0xFF);
+    logPrintFmt(ERROR, LINE, "\e[31m", "This is error log.");
+    logPrintFmt(ERROR, LINE, "\e[31m", "This is error log with params.: %d", 100);
+    logPrintFmt(ERROR, LINE, "\e[31m", "This is error log with params.: %d, %x", 100, 0xFF);
 
     logPrintFmt(WARN, LINE, "\e[33m", "This is warning log.");
     logPrintFmt(WARN, LINE, "\e[33m", "This is warning log with params.: %d", 100);
@@ -46,6 +46,26 @@ int main()
     logPrintFmt(TRACE, LINE, "\e[36m", "This is trace log.");
     logPrintFmt(TRACE, LINE, "\e[36m", "This is trace log with params.: %d", 100);
     logPrintFmt(TRACE, LINE, "\e[36m", "This is trace log with params.: %d, %x", 100, 0xFF);
+
+    logPrintFmt(ERROR, CUSTOM, "\e[31m", "This is error log.");
+    logPrintFmt(ERROR, CUSTOM, "\e[31m", "This is error log with params.: %d", 100);
+    logPrintFmt(ERROR, CUSTOM, "\e[31m", "This is error log with params.: %d, %x", 100, 0xFF);
+
+    logPrintFmt(WARN, CUSTOM, "\e[33m", "This is warning log.");
+    logPrintFmt(WARN, CUSTOM, "\e[33m", "This is warning log with params.: %d", 100);
+    logPrintFmt(WARN, CUSTOM, "\e[33m", "This is warning log with params.: %d, %x", 100, 0xFF);
+
+    logPrintFmt(INFO, CUSTOM, "\e[34m", "This is info log.");
+    logPrintFmt(INFO, CUSTOM, "\e[34m", "This is info log with params.: %d", 100);
+    logPrintFmt(INFO, CUSTOM, "\e[34m", "This is info log with params.: %d, %x", 100, 0xFF);
+
+    logPrintFmt(DEBUG, CUSTOM, "\e[35m", "This is debug log.");
+    logPrintFmt(DEBUG, CUSTOM, "\e[35m", "This is debug log with params.: %d", 100);
+    logPrintFmt(DEBUG, CUSTOM, "\e[35m", "This is debug log with params.: %d, %x", 100, 0xFF);
+
+    logPrintFmt(TRACE, CUSTOM, "\e[36m", "This is trace log.");
+    logPrintFmt(TRACE, CUSTOM, "\e[36m", "This is trace log with params.: %d", 100);
+    logPrintFmt(TRACE, CUSTOM, "\e[36m", "This is trace log with params.: %d, %x", 100, 0xFF);
 
     logPrint(ERROR, "This is error log.");
     logPrint(ERROR, "This is error log with params.: %d", 100);
