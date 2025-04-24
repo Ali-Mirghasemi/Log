@@ -2,6 +2,7 @@
 
 # Codeblocks Project
 *.depend
+*.layout
 
 # Prerequisites
 *.d
