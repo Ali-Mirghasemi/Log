@@ -13,7 +13,7 @@
 
 #define LOG_VER_MAJOR    0
 #define LOG_VER_MINOR    1
-#define LOG_VER_FIX      0
+#define LOG_VER_FIX      1
 
 /************************************************************************/
 /*                            Configuration                             */
@@ -52,8 +52,10 @@
      * @param LVL log level: NONE, ERROR, WARN, INFO, DEBUG, TRACE
      * @param F string: file path, ex: "./main.c"
      * @param L unsigned int: file line, 26
+     * @param M color mode: HEADER, LINE, CUSTOM
+     * @param C string: color code
      */
-    #define LOG_HEADER(LVL, F, L)               "[" #LVL " - " F ":" #L "] "
+    #define LOG_HEADER(LVL, F, L, M, C)         "[" LOG_COLOR_MODE_FMT(START, M, C) #LVL LOG_COLOR_MODE_FMT(END, M, C) " - " F ":" #L "] "
 #endif
 
 #ifndef LOG_END_LINE
@@ -68,6 +70,7 @@
      * @brief Specify Log color mode
      * - HEADER: only change color of header field
      * - LINE: change color of full line
+     * - CUSTOM: change user custom area
      */
     #define LOG_COLOR_MODE                      LINE
     /**
@@ -175,31 +178,50 @@
  * @param Arguments
  */
 #define logTrace(FMT, ...)                                          logPrint(TRACE, FMT, __VA_ARGS__)
-
+/**
+ * @brief Use for custom color mode
+ */
+#define LOG_COLOR_MODE_FMT(SIGN, MODE, COLOR)                       __LOG_COLOR_MODE_FMT(SIGN, MODE, COLOR)
 
 // ------------------------------ Private Macros -----------------------------
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
     #define __logPrintFmt_(LVL, COLOR_MODE, COLOR, FMT, ...) \
         if (LOG_LEVEL_ ##LVL <= LOG_LEVEL) { \
-            LOG_PRINT(COLOR __LOG_HEADER(LVL, __FILE__, __LINE__) __LOG_COLOR_MODE_HEADER_ ##COLOR_MODE FMT LOG_END_LINE __LOG_COLOR_MODE_LINE_ ##COLOR_MODE LOG_COLOR_DEFAULT __VA_OPT__(,) __VA_ARGS__); \
+            LOG_PRINT(LOG_COLOR_MODE_FMT(BASE, COLOR_MODE, COLOR) __LOG_HEADER(LVL, __FILE__, __LINE__, COLOR_MODE, COLOR) LOG_COLOR_MODE_FMT(HEADER, COLOR_MODE, COLOR) FMT LOG_END_LINE LOG_COLOR_MODE_FMT(LINE, COLOR_MODE, COLOR) LOG_COLOR_DEFAULT __VA_OPT__(,) __VA_ARGS__); \
         }
 #else
     #define __logPrintFmt_(LVL, COLOR_MODE, COLOR, FMT, ...) \
         if (LOG_LEVEL_ ##LVL <= LOG_LEVEL) { \
-            LOG_PRINT(COLOR __LOG_HEADER(LVL, __FILE__, __LINE__) __LOG_COLOR_MODE_HEADER_ ##COLOR_MODE FMT LOG_END_LINE __LOG_COLOR_MODE_LINE_ ##COLOR_MODE LOG_COLOR_DEFAULT, ##__VA_ARGS__); \
+            LOG_PRINT(LOG_COLOR_MODE_FMT(BASE, COLOR_MODE, COLOR) __LOG_HEADER(LVL, __FILE__, __LINE__, COLOR_MODE, COLOR) LOG_COLOR_MODE_FMT(HEADER, COLOR_MODE, COLOR) FMT LOG_END_LINE LOG_COLOR_MODE_FMT(LINE, COLOR_MODE, COLOR) LOG_COLOR_DEFAULT, ##__VA_ARGS__); \
         }
 #endif
 
 #define __logPrintFmt(LVL, COLOR_MODE, COLOR, FMT, ...)             __logPrintFmt_(LVL, COLOR_MODE, COLOR, FMT, __VA_ARGS__)
 
-#define __LOG_HEADER(LVL, F, L)                                     LOG_HEADER(LVL, F, L)
+#define __LOG_HEADER(LVL, F, L, M, C)                               LOG_HEADER(LVL, F, L, M, C)
+
+#define __LOG_COLOR_MODE_FMT(SIGN, MODE, COLOR)                     __LOG_COLOR_MODE_ ##SIGN ##_ ##MODE (COLOR)
 
 #if LOG_COLOR
-    #define __LOG_COLOR_MODE_HEADER_HEADER                          LOG_COLOR_DEFAULT
-    #define __LOG_COLOR_MODE_HEADER_LINE
+    #define __LOG_COLOR_MODE_BASE_HEADER(COLOR)                     COLOR
+    #define __LOG_COLOR_MODE_BASE_LINE(COLOR)                       COLOR
+    #define __LOG_COLOR_MODE_BASE_CUSTOM(COLOR)                
 
-    #define __LOG_COLOR_MODE_LINE_HEADER
-    #define __LOG_COLOR_MODE_LINE_LINE                              LOG_COLOR_DEFAULT
+    #define __LOG_COLOR_MODE_HEADER_HEADER(COLOR)                   LOG_COLOR_DEFAULT
+    #define __LOG_COLOR_MODE_HEADER_LINE(COLOR)
+    #define __LOG_COLOR_MODE_HEADER_CUSTOM(COLOR)
+
+    #define __LOG_COLOR_MODE_LINE_HEADER(COLOR)
+    #define __LOG_COLOR_MODE_LINE_LINE(COLOR)                       LOG_COLOR_DEFAULT
+    #define __LOG_COLOR_MODE_LINE_CUSTOM(COLOR)
+
+    #define __LOG_COLOR_MODE_START_HEADER(COLOR)
+    #define __LOG_COLOR_MODE_START_LINE(COLOR)
+    #define __LOG_COLOR_MODE_START_CUSTOM(COLOR)                    COLOR
+
+    #define __LOG_COLOR_MODE_END_HEADER(COLOR)                      
+    #define __LOG_COLOR_MODE_END_LINE(COLOR)                      
+    #define __LOG_COLOR_MODE_END_CUSTOM(COLOR)                      LOG_COLOR_DEFAULT
 #else
     #define LOG_COLOR_DEFAULT
     #define LOG_COLOR_ERROR
@@ -209,11 +231,25 @@
     #define LOG_COLOR_TRACE
     #define LOG_COLOR_MODE                                          LINE
 
-    #define __LOG_COLOR_MODE_HEADER_HEADER
-    #define __LOG_COLOR_MODE_HEADER_LINE
+    #define __LOG_COLOR_MODE_BASE_HEADER(COLOR)
+    #define __LOG_COLOR_MODE_BASE_LINE(COLOR)
+    #define __LOG_COLOR_MODE_BASE_CUSTOM(COLOR)
 
-    #define __LOG_COLOR_MODE_LINE_HEADER
-    #define __LOG_COLOR_MODE_LINE_LINE
+    #define __LOG_COLOR_MODE_HEADER_HEADER(COLOR)
+    #define __LOG_COLOR_MODE_HEADER_LINE(COLOR)
+    #define __LOG_COLOR_MODE_HEADER_CUSTOM(COLOR)
+
+    #define __LOG_COLOR_MODE_LINE_HEADER(COLOR)
+    #define __LOG_COLOR_MODE_LINE_LINE(COLOR)
+    #define __LOG_COLOR_MODE_LINE_CUSTOM(COLOR)
+
+    #define __LOG_COLOR_MODE_START_HEADER(COLOR)
+    #define __LOG_COLOR_MODE_START_LINE(COLOR)
+    #define __LOG_COLOR_MODE_START_CUSTOM(COLOR)
+
+    #define __LOG_COLOR_MODE_END_HEADER(COLOR)                      
+    #define __LOG_COLOR_MODE_END_LINE(COLOR)                      
+    #define __LOG_COLOR_MODE_END_CUSTOM(COLOR)
 #endif
 
 #endif
