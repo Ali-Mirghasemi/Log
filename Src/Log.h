@@ -72,7 +72,7 @@
      * - LINE: change color of full line
      * - CUSTOM: change user custom area
      */
-    #define LOG_COLOR_MODE                      LINE
+    #define LOG_COLOR_MODE                      CUSTOM
     /**
      * @brief Default color
      */
