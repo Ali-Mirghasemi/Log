@@ -184,7 +184,7 @@
 #define LOG_COLOR_MODE_FMT(SIGN, MODE, COLOR)                       __LOG_COLOR_MODE_FMT(SIGN, MODE, COLOR)
 
 // ------------------------------ Private Macros -----------------------------
-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
+#if defined(__cplusplus) || (defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
     #define __logPrintFmt_(LVL, COLOR_MODE, COLOR, FMT, ...) \
         if (LOG_LEVEL_ ##LVL <= LOG_LEVEL) { \
             LOG_PRINT(LOG_COLOR_MODE_FMT(BASE, COLOR_MODE, COLOR) __LOG_HEADER(LVL, __FILE__, __LINE__, COLOR_MODE, COLOR) LOG_COLOR_MODE_FMT(HEADER, COLOR_MODE, COLOR) FMT LOG_END_LINE LOG_COLOR_MODE_FMT(LINE, COLOR_MODE, COLOR) LOG_COLOR_DEFAULT __VA_OPT__(,) __VA_ARGS__); \
