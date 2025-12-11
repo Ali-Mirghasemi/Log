@@ -31,8 +31,15 @@
 /**
  * @brief Rename which function used to print, function must support printf input styles
  * void printf(const char* fmt, ...);
+ *
+ * @param LVL log level: NONE, ERROR, WARN, INFO, DEBUG, TRACE
+ * @param F string: file path, ex: "./main.c"
+ * @param L unsigned int: file line, 26
+ * @param M color mode: HEADER, LINE, CUSTOM
+ * @param C string: color code
+ * @param ... arguments
  */
-//#define LOG_PRINT                           printf
+//#define LOG_PRINT(LVL, F, L, M, C, FMT, ...)    printf(FMT LOG_VA_OPT(__VA_ARGS__))
 /**
  * @brief Auto include stdio.h
  */

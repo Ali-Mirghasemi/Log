@@ -102,18 +102,23 @@
 #define LOG_COLOR_MODE_FMT(SIGN, MODE, COLOR)                       __LOG_COLOR_MODE_FMT(SIGN, MODE, COLOR)
 
 // ------------------------------ Private Macros -----------------------------
-#if defined(__cplusplus) || (defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
-    #define __logPrintFmt_(LVL, COLOR_MODE, COLOR, FMT, ...) \
-        if (LOG_LEVEL_ ##LVL <= LOG_LEVEL) { \
-            LOG_PRINT(LOG_COLOR_MODE_FMT(BASE, COLOR_MODE, COLOR) __LOG_HEADER(LVL, __FILE__, __LINE__, COLOR_MODE, COLOR) LOG_COLOR_MODE_FMT(HEADER, COLOR_MODE, COLOR) FMT LOG_END_LINE LOG_COLOR_MODE_FMT(LINE, COLOR_MODE, COLOR) LOG_COLOR_DEFAULT __VA_OPT__(,) __VA_ARGS__); \
-        }
-#else
-    #define __logPrintFmt_(LVL, COLOR_MODE, COLOR, FMT, ...) \
-        if (LOG_LEVEL_ ##LVL <= LOG_LEVEL) { \
-            LOG_PRINT(LOG_COLOR_MODE_FMT(BASE, COLOR_MODE, COLOR) __LOG_HEADER(LVL, __FILE__, __LINE__, COLOR_MODE, COLOR) LOG_COLOR_MODE_FMT(HEADER, COLOR_MODE, COLOR) FMT LOG_END_LINE LOG_COLOR_MODE_FMT(LINE, COLOR_MODE, COLOR) LOG_COLOR_DEFAULT, ##__VA_ARGS__); \
-        }
-#endif
+#define __logPrintFmt__(LVL, COLOR_MODE, COLOR, FMT, ...) \
+    if (LOG_LEVEL_ ##LVL <= LOG_LEVEL) { \
+        LOG_PRINT( \
+            LVL, \
+            __FILE__, \
+            __LINE__, \
+            COLOR_MODE, \
+            COLOR, \
+            LOG_COLOR_MODE_FMT(BASE, COLOR_MODE, COLOR) \
+                  __LOG_HEADER(LVL, __FILE__, __LINE__, COLOR_MODE, COLOR) \
+                  LOG_COLOR_MODE_FMT(HEADER, COLOR_MODE, COLOR) \
+                  FMT LOG_END_LINE \
+                  LOG_COLOR_MODE_FMT(LINE, COLOR_MODE, COLOR) \
+                  LOG_COLOR_DEFAULT, __VA_ARGS__); \
+    }
 
+#define __logPrintFmt_(LVL, COLOR_MODE, COLOR, FMT, ...)            __logPrintFmt__(LVL, COLOR_MODE, COLOR, FMT, __VA_ARGS__)
 #define __logPrintFmt(LVL, COLOR_MODE, COLOR, FMT, ...)             __logPrintFmt_(LVL, COLOR_MODE, COLOR, FMT, __VA_ARGS__)
 
 #define __LOG_HEADER(LVL, F, L, M, C)                               LOG_HEADER(LVL, F, L, M, C)

@@ -4,9 +4,9 @@
  * @brief This file contains full configuration for Log Library
  * @version 0.1
  * @date 2025-12-11
- * 
+ *
  * @copyright Copyright (c) 2025
- * 
+ *
  */
 #ifndef _LOG_CONFIG_H_
 #define _LOG_CONFIG_H_
@@ -49,8 +49,16 @@
     /**
      * @brief Rename which function used to print, function must support printf input styles
      * void printf(const char* fmt, ...);
+     *
+     * @param LVL log level: NONE, ERROR, WARN, INFO, DEBUG, TRACE
+     * @param F string: file path, ex: "./main.c"
+     * @param L unsigned int: file line, 26
+     * @param M color mode: HEADER, LINE, CUSTOM
+     * @param C string: color code
+     * @param FMT string: format of string, first argument
+     * @param ... arguments
      */
-    #define LOG_PRINT                           printf
+    #define LOG_PRINT(LVL, F, L, M, C, FMT, ...)    printf(FMT LOG_VA_OPT(__VA_ARGS__))
     /**
      * @brief Auto include stdio.h
      */
@@ -109,6 +117,23 @@
      */
     #define LOG_COLOR_TRACE                     "\e[97m"
 #endif
+
+// ---------------------- Variadic Macro Compatibility ----------------------
+// Detection logic for __VA_OPT__ support
+// __VA_OPT__ is available in C++17, C23, and some compilers' extensions
+#ifndef LOG_VA_OPT 
+    #if (defined(__cplusplus) && __cplusplus >= 201703L) || \
+        (defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L) || \
+        (defined(__GNUC__) && __GNUC__ >= 8 && !defined(__STRICT_ANSI__)) || \
+        (defined(_MSC_VER) && _MSC_VER >= 1925 && defined(_MSVC_TRADITIONAL) && !_MSVC_TRADITIONAL)
+        // Compiler likely supports __VA_OPT__
+        #define LOG_VA_OPT(...)     __VA_OPT__(,) __VA_ARGS__
+    #else
+        // Fallback to GNU/MSVC ##__VA_ARGS__ extension
+        #define LOG_VA_OPT(...)     , ##__VA_ARGS__
+    #endif
+#endif
+
 /************************************************************************/
 
 #endif // _LOG_CONFIG_H_
