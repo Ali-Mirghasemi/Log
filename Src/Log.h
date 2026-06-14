@@ -21,7 +21,7 @@
 /**
  * @brief If you need to change log level in runtime you can enable this feature
  */
-#define LOG_DYNAMIC_LEVEL                       0
+#define LOG_DYNAMIC_LEVEL                       1
 /**
  * @brief Enable Log color
  */
@@ -123,7 +123,15 @@
 #define LOG_LEVEL_TRACE                         5
 /* Dynamic Log Level */
 #if LOG_DYNAMIC_LEVEL
-    static unsigned char LOG_LEVEL = LOG_LEVEL_TRACE;
+    #define LOG_LEVEL_INIT()                    unsigned char LOG_LEVEL = LOG_LEVEL_TRACE
+    #define LOG_LEVEL_SET(LVL)                  LOG_LEVEL = LVL
+    #define LOG_LEVEL_GET()                     LOG_LEVEL
+
+    extern unsigned char LOG_LEVEL;             // Declare global variable for log level
+#else
+    #define LOG_LEVEL_INIT()                    // Do nothing
+    #define LOG_LEVEL_SET(LVL)                  // Do nothing
+    #define LOG_LEVEL_GET()                     LOG_LEVEL
 #endif
 /**
  * @brief Print log with specify level
